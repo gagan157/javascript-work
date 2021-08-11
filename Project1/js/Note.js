@@ -22,12 +22,21 @@ h4.appendChild(h4txt);
 
 divC.appendChild(h4);
 
+let titl= document.createElement('input')
+titl.setAttribute('id','titleinput')
+titl.type='text'
+titl.placeholder='Add title'
 
+divC.appendChild(titl)
 
 let txtarea = document.createElement("textarea");
 txtarea.setAttribute("id", "area");
 
 divC.appendChild(txtarea);
+
+let countstr = document.createElement('span')
+countstr.setAttribute('id','count')
+divC.appendChild(countstr)
 
 let btn = document.createElement("input");
 btn.type = "button";
@@ -46,6 +55,7 @@ body.append(h2);
 
 var click = 0;
 var areaval;
+var titlevalue;
 
 let getbtn = document.querySelector("#btn");
 getbtn.addEventListener("click", counter);
@@ -53,13 +63,19 @@ getbtn.addEventListener("mousedown", getval);
 getbtn.addEventListener("mouseup", clrval);
 
 function getval() {
+  let titleget = document.querySelector("#titleinput")
   let areaget = document.querySelector("#area");
+  titlevalue = titleget.value;
   areaval = areaget.value;
-  console.log(areaval);
+  // console.log(areaval);
+  // console.log(titlevalue);
 }
+
 function clrval() {
+  let titler = document.querySelector('#titleinput')
   let areageto = document.querySelector("#area");
   areageto.value = "";
+  titler.value= "";
   // console.log(areaval)
 }
 //ye function notes ki div create karta hai jo value hmne di hai
@@ -72,6 +88,9 @@ function counter() {
   divp1.style.borderRadius = "5px";
   let h4n = document.createElement("h4");
   divp1.appendChild(h4n);
+  let title= document.createElement('h6')
+  title.setAttribute("id", "titleid");
+
   let par = document.createElement("p");
   par.setAttribute("id", "paranote");
 
@@ -80,14 +99,21 @@ function counter() {
   delbtn.type = "button";
   delbtn.value = "Delete Note";
 
-  if (areaval !== "") {
-    let notes = localStorage.getItem("notes");
+  if (areaval !== "") 
+  {
+    let notes = localStorage.getItem("notes") ;
+    var newItem = 
+            {
+            'title': titlevalue.toUpperCase(),
+            'note': areaval,
+            
+            };
     if (notes == null) {
       notesoobj = [];
     } else {
       notesoobj = JSON.parse(notes);
     }
-    notesoobj.push(areaval);
+    notesoobj.push(newItem);
     localStorage.setItem("notes", JSON.stringify(notesoobj));
 
     let len = notesObj.length;
@@ -104,7 +130,9 @@ function counter() {
     divp1.setAttribute("id", `note${click}`);
     let h4ntxt = document.createTextNode(`Note ${click}`);
     h4n.appendChild(h4ntxt);
+    title.innerText = `${titlevalue.toUpperCase()}`
     par.innerText = areaval;
+    divp1.appendChild(title)
     divp1.appendChild(par);
     divp1.appendChild(delbtn);
     let body = document.body;
@@ -115,7 +143,7 @@ function counter() {
     console.log(divp1);
   }
 }
-
+//get data to localstogae and show on display
 let notes = localStorage.getItem("notes");
 if (notes == null) {
   notesObj = [];
@@ -132,6 +160,10 @@ if (len !== 0) {
     divp1.style.borderRadius = "5px";
     let h4n = document.createElement("h4");
     divp1.appendChild(h4n);
+
+    let title= document.createElement('h6')
+    title.setAttribute("id", "titleid");
+
     let par = document.createElement("p");
     par.setAttribute("id", "paranote");
 
@@ -142,7 +174,9 @@ if (len !== 0) {
     divp1.setAttribute("id", `note${index + 1}`);
     let h4ntxt = document.createTextNode(`Note ${index + 1}`);
     h4n.appendChild(h4ntxt);
-    par.innerText = element;
+    title.innerText = element.title;
+    par.innerText = element.note;
+    divp1.appendChild(title)
     divp1.appendChild(par);
     divp1.appendChild(delbtn);
     let budy = document.body;
@@ -166,11 +200,11 @@ function delfun(obj) {
   // console.log(getid)
   // console.log(typeof getid)
   let del = document.querySelector(`#${getid}`);
-  //div ko remove karta hai
-  del.remove();
+  
   //div ka childer acess kiya hai
   let tex = del.children[1].innerText;
-  // console.log('tex',tex)
+  
+  console.log('tex',tex)
   let notes = localStorage.getItem("notes");
   // console.log(notes)
   if (notes == null) {
@@ -180,17 +214,20 @@ function delfun(obj) {
   }
   //itrate locastorage kiya hai
   notesObj.forEach(function (element, index) {
-    element = element.replace(/(\r\n|\n|\r)/gm, "");
-    //   console.log('ele:',element)
-    if (tex == element) {
+    // element = element.note.replace(/(\r\n|\n|\r)/gm, "");
+      console.log('ele:',element.title)
+    if (tex == element.title) {
       notesObj.splice(index, 1);
       localStorage.setItem("notes", JSON.stringify(notesObj));
     }
   });
+  //div ko remove karta hai
+   del.remove();
 }
 
 console.log(divP);
- //search fuction
+
+ //search eigine fuction
  let search = document.querySelector('#searchTxt')
  search.addEventListener('input',searcht)
 
@@ -198,9 +235,11 @@ console.log(divP);
      let val=search.value
      let parent = document.getElementsByClassName('containernote')
      Array.from(parent).forEach(function(element){
+      
          let cardTxt= element.getElementsByTagName("p")[0].innerText;
-         console.log(cardTxt)
-         if(cardTxt.includes(val)){
+         let cardtitle = element.getElementsByTagName("h6")[0].innerText.toLowerCase()
+        //  console.log(cardtitle)
+         if(cardtitle.includes(val) || cardTxt.includes(val)){
             element.style.display='block';
         }
         else{
@@ -209,6 +248,32 @@ console.log(divP);
      })
      
      
+ }
+
+ //count string in textarea
+ let areaid = document.getElementById('area')
+ areaid.addEventListener('input',counttxt)
+ var count=0
+ function counttxt() {
+   let getelmspan = document.getElementById('count')
+   getelmspan.innerText=0
+   let countarea = areaid.value
+   Array.from(countarea).forEach(function(element,index) {
+     
+      count = index
+     
+    
+     
+   })
+  // console.log('count',count)
+  //  console.log(countarea)
+  if(countarea==''){
+    getelmspan.innerText=count
+  }
+  else{
+    getelmspan.innerText=count+1
+  }
+    
  }
 
 
