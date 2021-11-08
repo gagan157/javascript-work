@@ -6,7 +6,7 @@ child.forEach(function(element){
    let href= element.href 
    var nameo = element.innerText
    if (ustext !== nameo.toLowerCase()){
-      console.log(`${nameo}:${href}`);
+      // console.log(`${nameo}:${href}`);
    }
 });
 
@@ -17,12 +17,12 @@ cretae.id='child5'
 //create element text and append
 let text = document.createTextNode('This is all link')
 cretae.appendChild(text)
-console.log(cretae)
+// console.log(cretae)
 
 // get parrent div and append in child 
 let ol = document.querySelector('.parent')
 ol.appendChild(cretae)
-console.log(ol)
+// console.log(ol)
 
 // Replace child 
 // let pol = document.querySelector('#myparent')
@@ -85,7 +85,7 @@ Array.from(chilo).forEach(function(element,indexof) {
      
    };
    
-   console.log(element)
+   // console.log(element)
 });
 //click fuction = click par replace kar rha hai input se
 function myfunk(obj) {
@@ -100,10 +100,10 @@ function myfunk(obj) {
    let tagnam = obj.tagName
    sessionStorage.setItem(tagnam,tagnam)
    //   let tagname=document. .tagname
-   console.log(tagnam)
+   // console.log(tagnam)
    localStorage.setItem('oldname',text)  
    obj.replaceWith(inp)
-   console.log(inp)
+   // console.log(inp)
    
 }
 //onchange fuction = ye input se left krte hai to input se h1 main conver hota hai
@@ -145,3 +145,17 @@ function focin(x) {
    
    
 }
+
+
+//my practice callback
+console.log('start' )
+function tm(name,clback){
+   setTimeout(()=>{
+      
+      clback ('timout functono'+name)
+   },2000)
+}
+rola = tm('josha' , (rola)=>{console.log(rola) })
+
+console.log('end')
+
